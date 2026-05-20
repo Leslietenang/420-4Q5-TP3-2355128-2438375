@@ -30,11 +30,7 @@ services:
       WORDPRESS_DB_USER: ${MYSQL_USER}
       WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
       WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
-      #WORDPRESS_CONFIG_EXTRA: |
-        #define('WP_HOME', 'http://localhost:81');
-        #define('WP_SITEURL', 'http://localhost:81');
 
- 
   db:
     image: mysql:latest
     container_name: db_mysql
