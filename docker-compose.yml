@@ -7,7 +7,7 @@ services:
     volumes:
       - ./reverseProxy/default.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
-      - app
+      - app     # Démarre après le conteneur app
     networks:
       - frontend
 
@@ -17,14 +17,14 @@ services:
     container_name: WordPressApp
     networks:
       - frontend
-      - backend
+      - backend     # Communique avec la base de données
     volumes:
-      - wp_data:/var/www/html
+      - wp_data:/var/www/html   # Persiste les données de WordPress
     depends_on:
       - db
 
     env_file: 
-      - .env
+      - .env    # Charge les variables d'environnement depuis le fichier .env
     environment:
       WORDPRESS_DB_HOST: db:3306
       WORDPRESS_DB_USER: ${MYSQL_USER}
@@ -36,8 +36,8 @@ services:
     container_name: db_mysql
   
     volumes:
-      - db_data:/var/lib/mysql
-    restart: always
+      - db_data:/var/lib/mysql  # Persiste les données de la base de données
+    restart: always     # Redémarre automatiquement le conteneur en cas de plantage
     env_file:
       - .env
     environment:
@@ -47,16 +47,16 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
 
     networks:
-      - backend
+      - backend   # Communique avec l'application WordPress
 
   maintenance:
     container_name: maintenance
     build: ./maintenance
     volumes:
-      - wp_data:/backup/wordpress
-      - db_data:/backup/db
-      - ./archive:/archives
-      - ~/.ssh:/root/.ssh:ro
+      - wp_data:/backup/wordpress   # Monte les volumes de données de WordPress pour les sauvegarder
+      - db_data:/backup/db          # Monte les volumes de données pour les sauvegarder
+      - ./archive:/archives         # Monte le dossier local archive pour stocker les sauvegardes
+      - ~/.ssh:/root/.ssh:ro        # Monte le dossier .ssh en lecture seule pour permettre les connexions SSH
     env_file:
       - .env
     networks:
@@ -67,8 +67,8 @@ services:
 
 
 volumes:
-  db_data:
-  wp_data:
-networks:
+  db_data:    # Volume pour les données de la base de données
+  wp_data:   # Volume pour les données de WordPress 
+networks:     # Réseaux pour isoler les services
   frontend:
   backend:
