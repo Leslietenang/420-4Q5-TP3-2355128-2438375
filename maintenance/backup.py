@@ -31,6 +31,7 @@ subprocess.run([
  
  
 for file in Path(SAUVEGARDE).glob("backup_*.tar.gz"):
+    
     nbreJours = (datetime.now().timestamp() - file.stat().st_mtime) / 86400
  
     if nbreJours  > 7:
